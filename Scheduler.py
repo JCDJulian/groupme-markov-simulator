@@ -33,8 +33,8 @@ def create_post():
     Sends a post from the Markov chain to the GroupmeAPI
     :return: void
     """
-    post = Markov_Chains.generate_post()
-    GroupmeApiHandler.create_post(post)
+    (bot_id, message) = Markov_Chains.generate_post()
+    GroupmeApiHandler.create_post(bot_id, message)
     pass
 
 
