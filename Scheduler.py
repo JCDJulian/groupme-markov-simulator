@@ -1,5 +1,6 @@
 import GroupmeApiHandler
 import Markov_Chains
+import sys
 
 
 """
@@ -35,3 +36,28 @@ def create_post():
     post = Markov_Chains.generate_post()
     GroupmeApiHandler.create_post(post)
     pass
+
+
+def parse_settings():
+    """
+    Read in and parse settings JSON object from DB
+    :return: settings dictionary
+    """
+    pass
+
+if __name__ == "__main__":
+    # Read in sys input to determine which command to execute
+    command = sys.argv[0]
+    if command == "train":
+        train_markov()
+    elif command == "create_post":
+        create_post()
+    elif command == "init":
+        setup_wizard()
+    else:
+        print("Welcome to MarkovMe. Version 1.0. \n\n"
+              "Run Scheduler.py <command> where \n"
+              "Possible commands are: \n"
+              "init - run set-up wizard for new chain \n"
+              "train - query the GroupMe for the week's training data \n"
+              "create_post - generate a new Markov post and send to GroupMe \n")
