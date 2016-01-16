@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="24aa10dd-9423-4c0d-96c5-be3b54652b0f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/DatabaseHandler.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/db_config.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GroupmeApiHandler.py" afterPath="$PROJECT_DIR$/GroupmeApiHandler.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DatabaseHandler.py" afterPath="$PROJECT_DIR$/DatabaseHandler.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Markov_Chains.py" afterPath="$PROJECT_DIR$/Markov_Chains.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Scheduler.py" afterPath="$PROJECT_DIR$/Scheduler.py" />
     </list>
@@ -47,23 +47,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DatabaseHandler.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DatabaseHandler.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Scheduler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Scheduler.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="27" column="8" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
+              <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
+                <element signature="e#93#345#1" expanded="false" />
+                <element signature="e#1115#1633#0" expanded="false" />
+                <element signature="e#1672#2019#0" expanded="false" />
+                <element signature="e#2061#2251#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DatabaseHandler.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DatabaseHandler.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="28" column="22" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -73,7 +79,17 @@
         <entry file="file://$PROJECT_DIR$/Markov_Chains.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="21" column="107" selection-start-line="21" selection-start-column="107" selection-end-line="21" selection-end-column="107" />
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="db_config.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/db_config.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-2.6666667">
+              <caret line="4" column="1" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -98,10 +114,12 @@
         <option value="$PROJECT_DIR$/groupme_api_handler.py" />
         <option value="$PROJECT_DIR$/markov_chains.py" />
         <option value="$PROJECT_DIR$/Groupme_API_Handler.py" />
-        <option value="$PROJECT_DIR$/Scheduler.py" />
         <option value="$PROJECT_DIR$/GroupmeApiHandler.py" />
         <option value="$PROJECT_DIR$/Markov_Chains.py" />
+        <option value="$PROJECT_DIR$/db_config.cfg" />
+        <option value="$PROJECT_DIR$/db_config.json" />
         <option value="$PROJECT_DIR$/DatabaseHandler.py" />
+        <option value="$PROJECT_DIR$/Scheduler.py" />
       </list>
     </option>
   </component>
@@ -446,7 +464,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="0" width="1282" height="1024" extended-state="7" />
+    <frame x="-1" y="0" width="1282" height="1024" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -487,7 +505,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -509,7 +527,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -519,6 +539,10 @@
           <caret line="27" column="8" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#93#345#1" expanded="false" />
+            <element signature="e#1115#1633#0" expanded="false" />
+            <element signature="e#1672#2019#0" expanded="false" />
+            <element signature="e#2061#2251#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -550,6 +574,10 @@
           <caret line="57" column="53" selection-start-line="57" selection-start-column="53" selection-end-line="57" selection-end-column="53" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#93#345#1" expanded="false" />
+            <element signature="e#1115#1633#0" expanded="false" />
+            <element signature="e#1672#2019#0" expanded="false" />
+            <element signature="e#2061#2251#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -581,6 +609,10 @@
           <caret line="43" column="32" selection-start-line="43" selection-start-column="32" selection-end-line="43" selection-end-column="32" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#93#345#1" expanded="false" />
+            <element signature="e#1115#1633#0" expanded="false" />
+            <element signature="e#1672#2019#0" expanded="false" />
+            <element signature="e#2061#2251#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -616,10 +648,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Markov_Chains.py">
+    <entry file="file:///usr/local/lib/python3.4/dist-packages/pymongo/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="21" column="107" selection-start-line="21" selection-start-column="107" selection-end-line="21" selection-end-column="107" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="35" />
           <folding />
         </state>
       </provider>
@@ -627,18 +659,40 @@
     <entry file="file://$PROJECT_DIR$/Scheduler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="27" column="8" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
+            <element signature="e#93#345#1" expanded="false" />
+            <element signature="e#1115#1633#0" expanded="false" />
+            <element signature="e#1672#2019#0" expanded="false" />
+            <element signature="e#2061#2251#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db_config.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.6666667">
+          <caret line="4" column="1" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Markov_Chains.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DatabaseHandler.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
+          <caret line="28" column="22" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
