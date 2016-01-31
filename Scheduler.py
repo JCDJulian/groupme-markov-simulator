@@ -27,8 +27,10 @@ def setup_wizard():
     # Create group
     GroupmeApiHandler.setup(user_names)
 
+    # TODO: Finish bot behavior
 
-def create_post(db_connection):
+
+def create_post():
     """
     Sends a post from the Markov chain to the GroupmeAPI
     :param db_connection: A DatabaseHandler object that allows interfacing w/ MongoDB
@@ -96,13 +98,13 @@ def update_messages(messages):
             text_file.close()
     return file_names, user_names
 
+
 if __name__ == "__main__":
     # Read in sys input to determine which command to execute
     command = sys.argv[0]
 
     if command == "create_post":
-        db = DatabaseHandler.DatabaseHandler()
-        create_post(db)
+        create_post()
     elif command == "init":
         setup_wizard()
     else:
