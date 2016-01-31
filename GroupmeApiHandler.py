@@ -3,7 +3,7 @@ import time
 import datetime
 
 
-def setup(new_group_name, old_group):
+def setup(member_names):
     """
     Creates a new group chat, initializes new bot versions of each participant in the original chat,
     and trains them initially with all the messages from the past month.
@@ -11,15 +11,14 @@ def setup(new_group_name, old_group):
     :param old_group: the Groupy list to be replicated
     :return: void
     """
-
+    new_group_name =groupy.Group.list().first.name
     # Create simulator group
     new_group = groupy.Group.create(new_group_name, description="A Markov chain simulation created with MarkovMe.")
     print("The new share URL for this group is ", new_group.share_url)
     # For each user in training group, create a bot in simulator group
-    original_members = old_group.members()
-    for member in original_members:
-        bot_name = member.identification()['nickname'] + " Bot"
-        groupy.Bot.create(bot_name, new_group)
+    for member in member_names:
+        bot_name = member + " Bot"
+        groupy.Bot.create(name=bot_name, group=new_group)
 
 
 def get_weekly_messages():
@@ -35,14 +34,45 @@ def get_weekly_messages():
     group = groupy.Group.list().first
     messages = group.messages()
 
+    EOF = False
     # Keep getting pages of 100 messages until the last message in that page is older than a week
-    while messages.iolder() and messages.last.created_at > one_week_ago:
-        pass
+    while messages.first.created_at > one_week_ago or not EOF:
+        try:
+            messages.iolder()
+        except ValueError:
+            EOF = True
+            print("No more messages")
+            break
 
     # Then run a filter to only have messages with a timestamp in the past week and returnGr
     this_weeks_messages = messages.filter(created__ge=one_week_ago_datetime)
 
     return this_weeks_messages
+
+
+def get_all_available_messages():
+    """
+    Sends GET request to Groupme to retrieve all messages available. Passes it off to Markovify to train.
+    :return: messages - a FilteredList of all GroupMe messages
+    """
+
+    group = groupy.Group.list().first
+    messages = group.messages()
+
+    EOF = False
+    counter = 0
+    # Keep getting pages of 100 messages until end
+    while not EOF or counter < 100:
+        try:
+            messages.iolder()
+            counter += 1
+            print("Messages received")
+        except TypeError:
+            EOF = True
+            print("No more messages")
+            break
+
+    return messages
 
 
 def create_post(bot_id, message):

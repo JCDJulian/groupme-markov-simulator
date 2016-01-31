@@ -16,41 +16,16 @@ def setup_wizard():
     Set-up wizard to prompt for user information to setup simulation.
     :return:
     """
-    print("Welcome to MarkovMe, Version 1.0. \n"
-          "First we need to establish a connection to a Mongo database. \n")
+    print("Welcome to MarkovMe, Version 1.0. \n")
 
-    host = input("Please enter the host name: ")
-    port = input("Now enter the port number of your database: ")
+    print("Downloading data from your GroupMe \n")
+    messages = GroupmeApiHandler.get_all_available_messages()
 
-    db_config = {
-      "system": "mongodb",
-      "host": host,
-      "port": str(port)
-    }
+    # Write all messages into separate text files
+    file_names, user_names = write_messages(messages)
 
-    # Write to JSON file
-    with open('db_config.json', 'w') as f:
-        json.dumps(db_config, f)
-
-    db = DatabaseHandler.DatabaseHandler()
-
-    print("Now we need to connect to the GroupMe you want to simulate \n")
-    # TODO: Save GroupMe settings to DB
-
-    pass
-
-
-def train_markov(db_connection):
-    """
-    Sends GET request to Groupme to retrieve all messages from past week. Passes it off to Markovify to train.
-    :param db_connection: A DatabaseHandler object that allows interfacing w/ MongoDB
-    :return: messages - a list of messages to be consumed by the Markov chain
-    """
-    messages = GroupmeApiHandler.get_weekly_messages()
-    old_chains = db_connection.get_markov_chains()
-    new_chains = Markov_Chains.train_markov(old_chains, messages)
-    db_connection.update_markov_chains(new_chains)
-    pass
+    # Create group
+    GroupmeApiHandler.setup(user_names)
 
 
 def create_post(db_connection):
@@ -59,28 +34,73 @@ def create_post(db_connection):
     :param db_connection: A DatabaseHandler object that allows interfacing w/ MongoDB
     :return: void
     """
-    old_chains = db_connection.get_markov_chains()
-    (bot_id, message) = Markov_Chains.generate_post(old_chains)
+    messages = GroupmeApiHandler.get_weekly_messages()
+    file_names, user_names = update_messages(messages)
+    (bot_id, message) = Markov_Chains.generate_post(file_names, user_names)
     GroupmeApiHandler.create_post(bot_id, message)
     pass
 
 
-def parse_settings(db_connection):
+def write_messages(messages):
     """
-    Read in and parse settings JSON object from DB
-    :param db_connection: A DatabaseHandler object that allows interfacing w/ MongoDB
-    :return: settings dictionary
+    Takes Groupy filtered list of Messages, writes them to a .txt file for each user
+    and then returns a list of filenames
+    :param messages: A Groupy FilteredList of Messages
+    :return: file_names - a list of file names; user_names - a list of user names
     """
-    pass
+    corpus_strings = dict()
+    for message in messages:
+        if message.text is not None:
+            if message.name in corpus_strings:
+                corpus_strings[message.name] += (message.text + " ")
+            else:
+                corpus_strings[message.name] = (message.text + " ")
+
+    file_names = list()
+    user_names = list()
+    for name in corpus_strings:
+        file_name = name + ".txt"
+        user_names.append(name)
+        file_names.append(file_name)
+        with open(file_name, "w") as text_file:
+            text_file.write(corpus_strings[name])
+            text_file.close()
+
+    return file_names, user_names
+
+
+def update_messages(messages):
+    """
+    Takes Groupy filtered list of Messages, updates the .txt file for each user
+    and then returns a list of filenames
+    :param messages: A Groupy FilteredList of Messages
+    :return: file_names - a list of file names; user_names - a list of user names
+    """
+    corpus_strings = dict()
+    for message in messages:
+        if message.text is not None:
+            if message.name in corpus_strings:
+                corpus_strings[message.name] += (message.text + " ")
+            else:
+                corpus_strings[message.name] = (message.text + " ")
+
+    # TODO: Check if any new users have joined chat
+    file_names = list()
+    user_names = list()
+    for name in corpus_strings:
+        file_name = name + ".txt"
+        user_names.append(name)
+        file_names.append(file_name)
+        with open(file_name, "a") as text_file:
+            text_file.write(corpus_strings[name])
+            text_file.close()
+    return file_names, user_names
 
 if __name__ == "__main__":
     # Read in sys input to determine which command to execute
     command = sys.argv[0]
 
-    if command == "train":
-        db = DatabaseHandler.DatabaseHandler()
-        train_markov(db)
-    elif command == "create_post":
+    if command == "create_post":
         db = DatabaseHandler.DatabaseHandler()
         create_post(db)
     elif command == "init":

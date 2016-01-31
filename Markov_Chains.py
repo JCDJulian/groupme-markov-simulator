@@ -5,7 +5,7 @@ Handles all aspects of the Markov chains. Training from data, generating new pos
 """
 
 
-def train_markov(old_chains, messages):
+def train_markov(messages):
     """
     Trains the Markov chains with data and saves to DB.
     :param old_chains: A dictionary object with the Markov chains for each bot.
