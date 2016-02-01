@@ -1,5 +1,6 @@
 import markovify
 import random
+import language_check
 """
 Handles all aspects of the Markov chains. Training from data, generating new posts from chains.
 """
@@ -37,11 +38,16 @@ def generate_post(text_models):
     rand_user = random.sample(text_models.keys(), 2)[0]
     rand_model = text_models[rand_user]
 
+    # Set up language_check
+    tool = language_check.LanguageTool('en-US')
+
     # Generate random message
     print("Generating random message...")
     message = None
     while message is None:
         message = rand_model.make_short_sentence(125, max_overlap_ratio=0.5, max_overlap_total=10)
+        matches = tool.check(message)
+        message = language_check.correct(message, matches)
     print("Message generated: ", message)
 
     return rand_user, message
