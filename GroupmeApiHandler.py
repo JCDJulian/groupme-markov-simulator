@@ -17,6 +17,8 @@ def setup(old_group, member_names):
     new_group_name = old_group.name + " Simulator"
     # Create simulator group
     new_group = groupy.Group.create(new_group_name, description="A Markov chain simulation created with MarkovMe.", share=True)
+
+    # KNOWN BUG: Created group not getting set to sharable. possible issue with GroupMe's API.
     print("The new share URL for this group is ", new_group.share_url)
     # For each user in training group, create a bot in simulator group
     for member in member_names:
@@ -39,6 +41,14 @@ def get_group(group_name):
     :return: Groupy group with matching name
     """
     return groupy.Group.list().filter(name__eq=group_name).first
+
+
+def get_group_contains(group_query):
+    """
+    :param group_query: Name of keyword to query groups for
+    :return: Groupy groups containing query
+    """
+    return groupy.Group.list().filter(name__contains=group_query)
 
 
 def get_weekly_messages():
@@ -81,7 +91,7 @@ def get_all_available_messages(group):
     EOF = False
     counter = 0
     # Keep getting pages of 100 messages until end
-    while not EOF or counter < 100:
+    while not EOF or counter < 150:
         try:
             messages.iolder()
             counter += 1
@@ -100,10 +110,10 @@ def get_user_names(group):
     :param group: Groupy group to extract names from
     :return: List of user names
     """
-    users = group.members.list()
+    users = group.members()
     user_names = list()
     for user in users:
-        user_names.append(user.name)
+        user_names.append(user.nickname)
 
     return user_names
 

@@ -16,7 +16,7 @@ def generate_markov_models(user_names):
         file_name = user + ".txt"
         with open(file_name) as f:
             text = f.read()
-        text_model = markovify.Text(text, state_size=1)
+        text_model = markovify.Text(text, state_size=2)
         text_models[user] = text_model
 
     return text_models
@@ -34,14 +34,14 @@ def generate_post(text_models):
 
     # Generate post from chain here
     # Select random chain and markov model
-    rand_user = random.sample(text_models.keys(), 1)[0]
+    rand_user = random.sample(text_models.keys(), 2)[0]
     rand_model = text_models[rand_user]
 
     # Generate random message
     print("Generating random message...")
     message = None
     while message is None:
-        message = rand_model.make_short_sentence(125)
+        message = rand_model.make_short_sentence(125, max_overlap_ratio=0.5, max_overlap_total=10)
     print("Message generated: ", message)
 
     return rand_user, message

@@ -42,11 +42,10 @@ def setup_wizard():
     GroupmeApiHandler.setup(old_group, user_names)
 
     # Create some test posts to get started.
-    for x in range(5):
-        create_post(user_names)
+    create_posts(user_names)
 
 
-def create_post(user_names):
+def create_posts(user_names):
     """
     Calls on Markov Chains to generate a post and send it to the simulator group.
     TODO: Fix Known issue: The create_post method identifies the correct bot by finding the bot
@@ -57,8 +56,9 @@ def create_post(user_names):
     :return: void
     """
     models = Markov_Chains.generate_markov_models(user_names)
-    (user_name, message) = Markov_Chains.generate_post(models)
-    GroupmeApiHandler.create_post(user_name, message)
+    for x in range(5):
+        (user_name, message) = Markov_Chains.generate_post(models)
+        GroupmeApiHandler.create_post(user_name, message)
 
 
 def write_messages(messages):
@@ -121,19 +121,26 @@ def update_messages(messages):
 
 if __name__ == "__main__":
     # Read in sys input to determine which command to execute
-    command = sys.argv[0]
+    command = sys.argv[1]
 
     if command == "create_post":
-        try:
-            # TODO: If simulator name not specified as argument, allow user to select from command line
-            group_name = sys.argv[1]
-            group = GroupmeApiHandler.get_group(group_name)
-            user_names = GroupmeApiHandler.get_user_names(group)
-            create_post(user_names)
-        except IndexError:
-            print("Error: You did not specify a group name to create a post for. Please run this again as "
-                  "python scheduler.py create_post <group_name>")
-            sys.exit(1)
+        print("Querying for your groups...")
+        groups = GroupmeApiHandler.get_group_contains("Simulator")
+        print("Found the following simulator groups:\n")
+        for group in groups:
+            print(group, "\n")
+
+        original_group = None
+        while original_group is None:
+            sim_name = input("Please type the name of the simulation you would like to run: ")
+            original_name = sim_name.replace(" Simulator", "")
+            original_group = GroupmeApiHandler.get_group(original_name)
+            if original_group is None:
+                print("Error. No groups found containing this string. Try again.")
+        print("Getting users...")
+        user_names = GroupmeApiHandler.get_user_names(original_group)
+        print("Creating posts...")
+        create_posts(user_names)
     # TODO: Allow command to train the simulator by getting the last week's messages
     elif command == "init":
         setup_wizard()
