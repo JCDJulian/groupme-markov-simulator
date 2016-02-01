@@ -2,14 +2,17 @@ import groupy
 import time
 import datetime
 
+"""
+Handles all API calls to GroupMe using groupy API wrapper.
+"""
+
 
 def setup(old_group, member_names):
     """
-    Creates a new group chat, initializes new bot versions of each participant in the original chat,
-    and trains them initially with all the messages from the past month.
-    :param new_group_name: string to name the new group
-    :param old_group: the Groupy list to be replicated
-    :return: void
+    Creates a new group chat, initializes new bot versions of each participant in the original chat.
+    :param member_names: the list of the names of the members to be simulated
+    :param old_group: the group to be simulated
+    :return: new_group: the groupy object of the new group
     """
     new_group_name = old_group.name + " Simulator"
     # Create simulator group
@@ -24,10 +27,17 @@ def setup(old_group, member_names):
 
 
 def get_groups():
+    """
+    :return: List of all groups for current user
+    """
     return groupy.Group.list()
 
 
 def get_group(group_name):
+    """
+    :param group_name: Name of group the query for
+    :return: Groupy group with matching name
+    """
     return groupy.Group.list().filter(name__eq=group_name).first
 
 
@@ -62,7 +72,7 @@ def get_weekly_messages():
 
 def get_all_available_messages(group):
     """
-    Sends GET request to Groupme to retrieve all messages available. Passes it off to Markovify to train.
+    Sends GET request to Groupme to retrieve all messages available.
     :return: messages - a FilteredList of all GroupMe messages
     """
 
@@ -85,6 +95,11 @@ def get_all_available_messages(group):
 
 
 def get_user_names(group):
+    """
+    Extracts Python list of user names from a Groupy group
+    :param group: Groupy group to extract names from
+    :return: List of user names
+    """
     users = group.members.list()
     user_names = list()
     for user in users:
@@ -92,12 +107,13 @@ def get_user_names(group):
 
     return user_names
 
+
 def create_post(user_name, message):
     """
-    Sends a post from the Markov chain to the GroupmeAPI
-    :param bot_id: The id of the bot that will make the post.
+    Lets corresponding bot post a message.
+    :param user_name: The name of the user being simulated whose bot is posting the message.
     :param message: The message to be posted.
-    :return: void
+    :return:
     """
 
     # Find bot with matching user_name

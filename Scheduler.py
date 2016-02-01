@@ -12,7 +12,7 @@ This is the script directly run on the server to accomplish the required task.
 
 def setup_wizard():
     """
-    Set-up wizard to prompt for user information to setup simulation.
+    Set-up wizard to prompt for user information to setup simulation and create a few test posts.
     :return:
     """
     print("Welcome to MarkovMe, Version 1.0. \n")
@@ -39,12 +39,23 @@ def setup_wizard():
     file_names, user_names = write_messages(messages)
 
     # Create group
-    new_group = GroupmeApiHandler.setup(old_group, user_names)
+    GroupmeApiHandler.setup(old_group, user_names)
 
+    # Create some test posts to get started.
     for x in range(5):
-        create_post(new_group, file_names, user_names)
+        create_post(user_names)
 
-def create_post(group, user_names):
+
+def create_post(user_names):
+    """
+    Calls on Markov Chains to generate a post and send it to the simulator group.
+    TODO: Fix Known issue: The create_post method identifies the correct bot by finding the bot
+    whose name is "user_name Bot". If the user is running multiple simulations with the same user name
+    in multiple simulations, this could potentially cause the wrong bot to post.
+    :param user_names: A list of user names corresponding to the group. Each user name should alraedy have
+    a corresponding user_name.txt file generated from the API the Markove chain will read from.
+    :return: void
+    """
     models = Markov_Chains.generate_markov_models(user_names)
     (user_name, message) = Markov_Chains.generate_post(models)
     GroupmeApiHandler.create_post(user_name, message)
@@ -55,7 +66,8 @@ def write_messages(messages):
     Takes Groupy filtered list of Messages, writes them to a .txt file for each user
     and then returns a list of filenames
     :param messages: A Groupy FilteredList of Messages
-    :return: file_names - a list of file names; user_names - a list of user names
+    :return: file_names - a list of file names;
+    :return: user_names - a list of user names
     """
     corpus_strings = dict()
     for message in messages:
@@ -83,7 +95,8 @@ def update_messages(messages):
     Takes Groupy filtered list of Messages, updates the .txt file for each user
     and then returns a list of filenames
     :param messages: A Groupy FilteredList of Messages
-    :return: file_names - a list of file names; user_names - a list of user names
+    :return: file_names - a list of file names
+    :return: user_names - a list of user names
     """
     corpus_strings = dict()
     for message in messages:
@@ -112,14 +125,16 @@ if __name__ == "__main__":
 
     if command == "create_post":
         try:
+            # TODO: If simulator name not specified as argument, allow user to select from command line
             group_name = sys.argv[1]
             group = GroupmeApiHandler.get_group(group_name)
             user_names = GroupmeApiHandler.get_user_names(group)
-            create_post(group, user_names)
+            create_post(user_names)
         except IndexError:
             print("Error: You did not specify a group name to create a post for. Please run this again as "
                   "python scheduler.py create_post <group_name>")
             sys.exit(1)
+    # TODO: Allow command to train the simulator by getting the last week's messages
     elif command == "init":
         setup_wizard()
     else:
