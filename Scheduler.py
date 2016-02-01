@@ -1,8 +1,7 @@
 import GroupmeApiHandler
 import Markov_Chains
 import sys
-import DatabaseHandler
-import json
+
 
 """
 Scheduler handles the frequency of posts and training for the simulator.
@@ -17,30 +16,38 @@ def setup_wizard():
     :return:
     """
     print("Welcome to MarkovMe, Version 1.0. \n")
+    print("Please make sure that you have set up your .groupy.key file. For more information, see the Groupy API: \n"
+          "http://groupy.readthedocs.org/en/master/pages/installation.html#prerequisites")
+
+    print("Querying for your groups...")
+    groups = GroupmeApiHandler.get_groups()
+    print("Found the following groups:\n")
+    for group in groups:
+        print(group, "\n")
+
+    old_group = None
+    while old_group is None:
+        original_group_name = input("Please type the name of the group you would like to simulate: ")
+        old_group = GroupmeApiHandler.get_group(original_group_name)
+        if old_group is None:
+            print("Error. No groups found containing this string. Try again.")
 
     print("Downloading data from your GroupMe \n")
-    messages = GroupmeApiHandler.get_all_available_messages()
+    messages = GroupmeApiHandler.get_all_available_messages(old_group)
 
     # Write all messages into separate text files
     file_names, user_names = write_messages(messages)
 
     # Create group
-    GroupmeApiHandler.setup(user_names)
+    new_group = GroupmeApiHandler.setup(old_group, user_names)
 
-    # TODO: Finish bot behavior
+    for x in range(5):
+        create_post(new_group, file_names, user_names)
 
-
-def create_post():
-    """
-    Sends a post from the Markov chain to the GroupmeAPI
-    :param db_connection: A DatabaseHandler object that allows interfacing w/ MongoDB
-    :return: void
-    """
-    messages = GroupmeApiHandler.get_weekly_messages()
-    file_names, user_names = update_messages(messages)
-    (bot_id, message) = Markov_Chains.generate_post(file_names, user_names)
-    GroupmeApiHandler.create_post(bot_id, message)
-    pass
+def create_post(group, user_names):
+    models = Markov_Chains.generate_markov_models(user_names)
+    (user_name, message) = Markov_Chains.generate_post(models)
+    GroupmeApiHandler.create_post(user_name, message)
 
 
 def write_messages(messages):
@@ -104,7 +111,15 @@ if __name__ == "__main__":
     command = sys.argv[0]
 
     if command == "create_post":
-        create_post()
+        try:
+            group_name = sys.argv[1]
+            group = GroupmeApiHandler.get_group(group_name)
+            user_names = GroupmeApiHandler.get_user_names(group)
+            create_post(group, user_names)
+        except IndexError:
+            print("Error: You did not specify a group name to create a post for. Please run this again as "
+                  "python scheduler.py create_post <group_name>")
+            sys.exit(1)
     elif command == "init":
         setup_wizard()
     else:

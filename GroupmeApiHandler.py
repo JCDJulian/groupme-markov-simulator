@@ -3,7 +3,7 @@ import time
 import datetime
 
 
-def setup(member_names):
+def setup(old_group, member_names):
     """
     Creates a new group chat, initializes new bot versions of each participant in the original chat,
     and trains them initially with all the messages from the past month.
@@ -11,14 +11,24 @@ def setup(member_names):
     :param old_group: the Groupy list to be replicated
     :return: void
     """
-    new_group_name =groupy.Group.list().first.name
+    new_group_name = old_group.name + " Simulator"
     # Create simulator group
-    new_group = groupy.Group.create(new_group_name, description="A Markov chain simulation created with MarkovMe.")
+    new_group = groupy.Group.create(new_group_name, description="A Markov chain simulation created with MarkovMe.", share=True)
     print("The new share URL for this group is ", new_group.share_url)
     # For each user in training group, create a bot in simulator group
     for member in member_names:
         bot_name = member + " Bot"
         groupy.Bot.create(name=bot_name, group=new_group)
+
+    return new_group
+
+
+def get_groups():
+    return groupy.Group.list()
+
+
+def get_group(group_name):
+    return groupy.Group.list().filter(name__eq=group_name).first
 
 
 def get_weekly_messages():
@@ -50,13 +60,12 @@ def get_weekly_messages():
     return this_weeks_messages
 
 
-def get_all_available_messages():
+def get_all_available_messages(group):
     """
     Sends GET request to Groupme to retrieve all messages available. Passes it off to Markovify to train.
     :return: messages - a FilteredList of all GroupMe messages
     """
 
-    group = groupy.Group.list().first
     messages = group.messages()
 
     EOF = False
@@ -75,7 +84,15 @@ def get_all_available_messages():
     return messages
 
 
-def create_post(bot_id, message):
+def get_user_names(group):
+    users = group.members.list()
+    user_names = list()
+    for user in users:
+        user_names.append(user.name)
+
+    return user_names
+
+def create_post(user_name, message):
     """
     Sends a post from the Markov chain to the GroupmeAPI
     :param bot_id: The id of the bot that will make the post.
@@ -83,11 +100,9 @@ def create_post(bot_id, message):
     :return: void
     """
 
-    # Find bot with matching bot_id
-    bots = groupy.Bot.list()
-    posting_bot = None
-    for bot in bots:
-        if bot.bot_id == bot_id:
-            posting_bot = bot
-
-    posting_bot.post(message)
+    # Find bot with matching user_name
+    posting_bot = groupy.Bot.list().filter(name__contains=user_name).first
+    if posting_bot is None:
+        print("Error. Could not find a bot matching that name to create post.")
+    else:
+        posting_bot.post(message)
